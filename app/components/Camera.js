@@ -1,26 +1,44 @@
 import React, { useState, useRef } from "react";
 import { Camera } from "react-camera-pro";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import UploadIcon from "@mui/icons-material/Upload";
 import Link from "next/link";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const Component = () => {
   const camera = useRef(null);
   const [image, setImage] = useState(null);
 
+  const uploadImage = async (event) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, image.name);
+    uploadBytes(storageRef, file).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+  };
+
   return (
-    <Box height="400px">
-      <Link
-        key="home"
-        href="/"
-        className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
+    <Box
+      height="450px"
+      padding={4}
+      display="flex"
+      flexDirection={"column"}
+      justifyContent="center"
+    >
+      <Button
+        onClick={() => setImage(camera.current.takePhoto())}
+        variant="contained"
       >
-        <p className="hidden md:block">Back</p>
-      </Link>
-      <button onClick={() => setImage(camera.current.takePhoto())}>
         Take photo
-      </button>
-      <img src={image} alt="Taken photo" />
-      <Camera ref={camera} aspectRatio={2 / 1} />
+      </Button>
+      <Camera ref={camera} aspectRatio={4 / 3} />
+      <Button
+        onClick={() => uploadImage()}
+        variant="contained"
+        startIcon={<UploadIcon />}
+      >
+        Upload
+      </Button>
     </Box>
   );
 };

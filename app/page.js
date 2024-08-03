@@ -6,7 +6,11 @@ import AddIcon from "@mui/icons-material/Add";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
+import { Component } from "./components/Camera";
+
 import {
   Box,
   Modal,
@@ -30,6 +34,7 @@ import {
 export default function Home() {
   const [inventory, setInventory] = useState([]);
   const [open, setOpen] = useState(false);
+  const [showCam, setCam] = useState(false);
   const [itemName, setItemName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -83,6 +88,8 @@ export default function Home() {
     updateInventory();
   }, []);
 
+  const handleCamOpen = () => setCam(true);
+  const handleCamClose = () => setCam(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -119,16 +126,35 @@ export default function Home() {
       alignItems="center"
       gap={2}
     >
-      <Link
-        key="camera"
-        href="/camera"
-        className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
-      >
-        <p className="hidden md:block">Camera</p>
-      </Link>
-
-      <Modal>
-        <Box></Box>
+      <Modal open={showCam} onClose={handleCamOpen} justifyContent={"center"}>
+        <Box
+          position="absolute"
+          top="50%"
+          left="50%"
+          width={600}
+          boxShadow={24}
+          p={4}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+          sx={{ transform: "translate(-50%, -50%)" }}
+          bgcolor="white"
+          borderRadius={5}
+        >
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloseIcon />}
+            onClick={() => {
+              handleCamClose();
+            }}
+          >
+            Close
+          </Button>
+          <Component />
+        </Box>
       </Modal>
 
       <Modal open={open} onClose={handleClose}>
@@ -171,6 +197,18 @@ export default function Home() {
       </Modal>
 
       <Box>
+        <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<PhotoCameraIcon />}
+          onClick={() => {
+            handleCamOpen();
+          }}
+        >
+          Camera
+        </Button>
         <Box
           width="800px"
           height="100px"
