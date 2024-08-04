@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "PantryPack",
-  description: "Track your food inventory with PantryPick",
+  description: "Track your food inventory with PantryPack",
 };
 
 export default function RootLayout({ children }) {
